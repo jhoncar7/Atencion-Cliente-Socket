@@ -1,38 +1,47 @@
 
-// referencias del html
-
-const lblonline = document.querySelector('#lblonline');
-const lbloffline = document.querySelector('#lbloffline');
+// Referencias del HTML
+const lblOnline  = document.querySelector('#lblOnline');
+const lblOffline = document.querySelector('#lblOffline');
 const txtMensaje = document.querySelector('#txtMensaje');
-const btnEnviar = document.querySelector('#btnEnviar');
+const btnEnviar  = document.querySelector('#btnEnviar');
+
+
 const socket = io();
 
-socket.on('connect', () => {
-    console.log('Conectado...')
 
-    lbloffline.style.display = 'none';
-    lblonline.style.display = '';
+
+socket.on('connect', () => {
+    // console.log('Conectado');
+
+    lblOffline.style.display = 'none';
+    lblOnline.style.display  = '';
+
 });
 
 socket.on('disconnect', () => {
-    console.log('Disconnect...')
-    lbloffline.style.display = '';
-    lblonline.style.display = 'none';
+    // console.log('Desconectado del servidor');
+
+    lblOnline.style.display  = 'none';
+    lblOffline.style.display = '';
 });
 
-btnEnviar.addEventListener('click', () => {
-    const mensaje = txtMensaje.value;
-
-    const payload = {
-        msg: mensaje,
-        id: '123',
-        fecha: Date.now()
-    }
-    socket.emit('enviar-mensaje', payload, (id) => {
-        console.log('desde el server', { id })
-    });
-})
 
 socket.on('enviar-mensaje', (payload) => {
-    console.log(payload)
+    console.log( payload )
 })
+
+
+btnEnviar.addEventListener( 'click', () => {
+
+    const mensaje = txtMensaje.value;
+    const payload = {
+        mensaje,
+        id: '123ABC',
+        fecha: new Date().getTime()
+    }
+    
+    socket.emit( 'enviar-mensaje', payload, ( id ) => {
+        console.log('Desde el server', id );
+    });
+
+});
